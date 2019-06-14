@@ -3,6 +3,7 @@ function Carousel($ct){
     this.bind()
 }
 Carousel.prototype={
+    constructor:Carousel,
     init:function($ct){
         this.$ct=$ct
         this.$imgCt=this.$ct.find('.img-ct')
@@ -13,12 +14,16 @@ Carousel.prototype={
         this.imgWidth=this.$imgs.width()
         this.imgCount=this.$imgs.length
         this.index=0
+        this.isAnimate=false
 
         this.$imgCt.append(this.$imgs.first().clone())
         this.$imgCt.prepend(this.$imgs.last().clone())
         
         this.$imgCt.width(this.imgWidth*(this.imgCount+2))
         this.$imgCt.css({left:-this.imgWidth})
+
+        this.$btnAuto=this.$ct.find('footer .btn-autoPlay')
+        this.$btnStop=this.$ct.find('footer .btn-stop')
     },
     bind:function(){
         var _this=this
@@ -34,17 +39,23 @@ Carousel.prototype={
                 _this.playNext(idx-_this.index)
             }else{
                 _this.playPre(_this.index-idx)
-            }   
-            
+            }    
+        })
+        this.$btnAuto.on('click',function(){
+            _this.autoPlay()
+        })
+        this.$btnStop.on('click',function(){
+            _this.stopPlay()
         })
     },
     playNext:function(step){
-        _this=this
+        var _this=this
+        if(this.isAnimate)return
+        this.isAnimate=true
         this.$imgCt.animate({
             left:'-='+this.imgWidth*step
         },function(){
             _this.index+=step
-            console.log(_this.index)
             if(_this.index===_this.imgCount){
                 _this.$imgCt.css({
                     'left':-_this.imgWidth
@@ -52,10 +63,13 @@ Carousel.prototype={
                 _this.index=0
             }
             _this.setBullet()
+            _this.isAnimate=false
         })
     },
     playPre:function(step){
-        _this=this
+        var _this=this
+        if(this.isAnimate)return
+        this.isAnimate=true
         this.$imgCt.animate({
             left:'+='+this.imgWidth*step
         },function(){
@@ -65,14 +79,25 @@ Carousel.prototype={
                 _this.index=_this.imgCount-1
             }
             _this.setBullet()
+            _this.isAnimate=false
         })
 
     },
     setBullet:function(){
         this.$bullets.eq(this.index).addClass('active')
         .siblings().removeClass('active')
+    },
+    autoPlay:function(){
+        var _this=this
+        this.autoClock=setInterval(function(){
+            _this.playNext(1)
+        },2000)
+    },
+    stopPlay:function(){
+        clearInterval(this.autoClock)
     }
+
 }
 
-new Carousel($('.carousel').eq(0))
-new Carousel($('.carousel').eq(1))
+var slide1=new Carousel($('.carousel').eq(0))
+var slide2=new Carousel($('.carousel').eq(1))

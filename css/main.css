@@ -1,8 +1,19 @@
+html,body{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
 .carousel{
     position: relative;
     width: 320px;
-    height: 180px;
-    margin: 30px auto;
+    height: 220px;
+    margin: 30px auto 10px auto;
     overflow: hidden;
 }
 .carousel ul,
@@ -31,7 +42,8 @@
 
 .carousel .arrow{
     position: absolute;
-    top: 50%;
+    top: 42%;
+    font-size: 30px;
     margin-top: -15px;
     display: inline-block;
     width: 30px;
@@ -54,7 +66,7 @@
 }
 .carousel .bullet{
     position:absolute;
-    bottom: 10px;
+    top: 160px;
     width: 100%;
     font-size: 0;
     z-index: 1;
@@ -72,4 +84,22 @@
 }
 .carousel .bullet>li.active{
     background-color: #ccc;
+}
+
+footer{
+    margin-top: 190px;
+    height: 20px;
+    text-align: center;
+}
+footer .btn{
+    display: inline-block;
+    font-size: 12px;
+    padding: 2px 8px;
+    margin: 0 4px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    cursor: pointer;
+}
+footer .btn:active{
+    background-color: bisque;
 }
