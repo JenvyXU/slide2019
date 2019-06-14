@@ -23,24 +23,27 @@ Carousel.prototype={
     bind:function(){
         var _this=this
         this.$preBtn.on('click',function(){
-            console.log('pre')
-            _this.playPre()
+            _this.playPre(1)
         })
         this.$nextBtn.on('click',function(){
-            console.log('next');
-            _this.playNext()
+            _this.playNext(1)
         })
         this.$bullets.on('click',function(){
-            console.log($(this).index());
+           var idx=$(this).index()
+            if(idx>_this.index){
+                _this.playNext(idx-_this.index)
+            }else{
+                _this.playPre(_this.index-idx)
+            }   
             
         })
     },
-    playNext:function(){
+    playNext:function(step){
         _this=this
         this.$imgCt.animate({
-            left:'-='+this.imgWidth
+            left:'-='+this.imgWidth*step
         },function(){
-            _this.index++
+            _this.index+=step
             console.log(_this.index)
             if(_this.index===_this.imgCount){
                 _this.$imgCt.css({
@@ -51,12 +54,12 @@ Carousel.prototype={
             _this.setBullet()
         })
     },
-    playPre:function(){
+    playPre:function(step){
         _this=this
         this.$imgCt.animate({
-            left:'+='+this.imgWidth
+            left:'+='+this.imgWidth*step
         },function(){
-            _this.index--
+            _this.index-=step
             if(_this.index<0){
                 _this.$imgCt.css({left:-_this.imgCount*_this.imgWidth})
                 _this.index=_this.imgCount-1
